@@ -4,7 +4,7 @@
 
 <https://graphql.org/learn/>
 
-✅ Créer un simple serveur GraphQL
-✅ Ecrire un schéma
-✅ Définir les Query et les Mutations
-✅ Coder les resolvers
+- Créer un simple serveur GraphQL
+- Ecrire un schéma
+- Définir les Query et les Mutations
+- Coder les resolvers
