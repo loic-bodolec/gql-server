@@ -5,11 +5,15 @@ var { buildSchema } = require('graphql');
 
 // GraphQL schema : schema which now consists of a custom type Course and two query actions.
 // The Course object type consist of six properties in total. The defined query actions enable the user to retrieve a single course by ID or retrieving an array of Course objects by course topic.
+// The mutation which is defined is named updateCourseTopic and takes two mandatory parameter: id and topic. The return type of that mutation is Course.
 var schema = buildSchema(`
     type Query {
         course(id: Int!): Course
         courses(topic: String): [Course]
     },
+    type Mutation {
+        updateCourseTopic(id: Int!, topic: String!): Course
+    }
     type Course {
         id: Int
         title: String
@@ -63,11 +67,22 @@ var getCourses = function(args) {
     }
 }
 
+var updateCourseTopic = function({id, topic}) {
+    coursesData.map(course => {
+        if (course.id === id) {
+            course.topic = topic;
+            return course;
+        }
+    });
+    return coursesData.filter(course => course.id === id) [0];
+}
+
 // Root resolver
 // In the root resolver we’re connecting the course query action to the getCourse function and the courses query action to the getCourses function.
 var root = {
     course: getCourse,
-    courses: getCourses
+    courses: getCourses,
+    updateCourseTopic: updateCourseTopic
 };
 
 // Create an express server and a GraphQL endpoint
