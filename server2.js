@@ -3,7 +3,8 @@ var { graphqlHTTP} = require('express-graphql');
 var { buildSchema } = require('graphql');
 
 
-// GraphQL schema
+// GraphQL schema : schema which now consists of a custom type Course and two query actions.
+// The Course object type consist of six properties in total. The defined query actions enable the user to retrieve a single course by ID or retrieving an array of Course objects by course topic.
 var schema = buildSchema(`
     type Query {
         course(id: Int!): Course
@@ -18,7 +19,7 @@ var schema = buildSchema(`
         url: String
     }
 `);
-
+// To be able to return data without the need to connect to a database we’re defining the coursesData array with some dummy course data inside.
 var coursesData = [
     {
         id: 1,
@@ -62,6 +63,8 @@ var getCourses = function(args) {
     }
 }
 
+// Root resolver
+// In the root resolver we’re connecting the course query action to the getCourse function and the courses query action to the getCourses function.
 var root = {
     course: getCourse,
     courses: getCourses
