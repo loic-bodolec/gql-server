@@ -10,9 +10,11 @@ var schema = buildSchema(`
     type Query {
         course(id: Int!): Course
         courses(topic: String): [Course]
+        coursesByTitle(title: String!) : [Course]
     },
     type Mutation {
         updateCourseTopic(id: Int!, topic: String!): Course
+        addCourse(id: Int!, title: String!, author: String!, description: String!, topic: String!, url: String!): [Course]
     }
     type Course {
         id: Int
@@ -67,6 +69,26 @@ var getCourses = function(args) {
     }
 }
 
+var getCoursesByTitle = function (args) {
+    let title = args.title;
+    return coursesData.filter((course) => {
+      return course.title.toLowerCase().includes(title.toLowerCase());
+    });
+  };
+
+var addCourse = function({id, title, author, description, topic, url}) {
+    var course = {
+        id: id,
+        title: title,
+        author: author,
+        description: description,
+        topic: topic,
+        url: url
+    }
+    coursesData.push(course)
+    return coursesData;
+}
+
 var updateCourseTopic = function({id, topic}) {
     coursesData.map(course => {
         if (course.id === id) {
@@ -82,6 +104,8 @@ var updateCourseTopic = function({id, topic}) {
 var root = {
     course: getCourse,
     courses: getCourses,
+    coursesByTitle: getCoursesByTitle,
+    addCourse: addCourse,
     updateCourseTopic: updateCourseTopic
 };
 
